@@ -1,4 +1,5 @@
 /data/util/masks/*
+!/data/util/masks/.gitkeep
 /datasets/*
 /experiments/*
 
