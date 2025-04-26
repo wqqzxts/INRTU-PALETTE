@@ -9,15 +9,15 @@
         "tb_logger": "tb_logger",
         "results": "results",
         "checkpoint": "checkpoint",
-        // "resume_state": null
-        "resume_state": "/home/jovyan/cloud/Palette/PaletteRepository/Palette-Image-to-Image-Diffusion-Models/experiments/_checkpoints/2680"
+        "resume_state": null
+        // "resume_state": "/home/jovyan/cloud/Palette/INRTU-PALETTE/experiments/checkpoints/"
     },
     "datasets": {
         "train": {
             "which_dataset": {
                 "name": ["data.dataset", "InpaintDataset"],
                 "args": {
-                    "data_root": "/home/jovyan/cloud/Palette/PaletteRepository/Palette-Image-to-Image-Diffusion-Models/datasets/ipfz/flist/true_data/train.flist",
+                    "data_root": "/home/jovyan/cloud/Palette/INRTU-PALETTE/datasets/ipfz/flist/true_data/train.flist",
                     "data_len": -1,
                     "mask_config": {
                         "mask_mode": "ebsd_missing_data_simulation"

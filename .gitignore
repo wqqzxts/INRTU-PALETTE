@@ -1,6 +1,7 @@
 /data/util/masks/*
 !/data/util/masks/.gitkeep
 /datasets/*
+!/datasets/.gitkeep
 /experiments/*
 
 __pycache__/
