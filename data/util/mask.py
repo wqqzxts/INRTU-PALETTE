@@ -4,6 +4,8 @@ import math
 import cv2
 import numpy as np
 from PIL import Image, ImageDraw
+import random
+import os
 
 
 def random_cropping_bbox(img_shape=(256,256), mask_mode='onedirection'):
@@ -337,86 +339,44 @@ def get_irregular_mask(img_shape, area_ratio_range=(0.15, 0.5), **kwargs):
 
     return mask
 
-def random_pixel_dropout_mask(img_shape):
-    """
-    Generates a mask with random pixel dropout.
-    
-    Args:
-        img_shape (tuple): Shape of the image (height, width).
-    
-    Returns:
-        numpy.ndarray: Binary mask of shape (height, width, 1), where 1 indicates missing pixels.
-    """
-    dropout_ratio=0.1
-    mask = np.zeros(img_shape[:2], dtype=np.uint8)
-    num_pixels = int(dropout_ratio * img_shape[0] * img_shape[1])
-    
-    y_coords = np.random.randint(0, img_shape[0], size=num_pixels)
-    x_coords = np.random.randint(0, img_shape[1], size=num_pixels)
-    mask[y_coords, x_coords] = 1
-    
-    return mask[:, :, np.newaxis]
 
 def create_mask_from_image(img_shape):
-  """
-  Creates a mask array from an image.
-  
-  Args:
-      image_path (str): Path to the image file.
-  
-  Returns:
-      numpy.ndarray: Binary mask of shape (height, width, 1), where 1 indicates missing pixels.
-  """
-  image_path = "Z:\Qzxts\Education\.INRTU\(Project) ПоликристаллическийКремний\Palette\data\util\mask\MASK_1_8.png"
-  # Load the image
-  image = Image.open(image_path)
-  
-  # Convert the image to grayscale
-  image = image.convert('L')
-  
-  # Threshold the image to create a binary mask
-  mask = np.array(image) > 0
-  mask = mask.astype(np.uint8)
-  
-  # Add the channel dimension
-  mask = mask[:, :, np.newaxis]
-  
-  return mask
-
-
-def clustered_pixel_dropout_mask(img_shape, cluster_size=10, num_clusters=5, dropout_ratio=0.5):
     """
-    Generates a mask with clustered pixel dropout, where each cluster has a specified dropout ratio.
+    Creates a mask array from an image by randomly selecting a mask file from a directory.
+    The mask is inverted (black becomes white and white becomes black) after conversion to grayscale.
     
     Args:
-        img_shape (tuple): Shape of the image (height, width).
-        cluster_size (int): Size of each cluster (radius or side length).
-        num_clusters (int): Number of clusters to generate.
-        dropout_ratio (float): Proportion of pixels to dropout within each cluster (0 to 1).
+        img_shape (tuple): Shape of the target image (height, width, channels). Not used directly but could be for validation.
     
     Returns:
         numpy.ndarray: Binary mask of shape (height, width, 1), where 1 indicates missing pixels.
     """
-    mask = np.zeros(img_shape[:2], dtype=np.uint8)
+    mask_dir = "/home/jovyan/cloud/Palette/INRTU-PALETTE/data/util/masks"
     
-    for _ in range(num_clusters):
-        center_y = np.random.randint(0, img_shape[0])
-        center_x = np.random.randint(0, img_shape[1])
-        
-        cluster_pixels = []
-        for y in range(max(0, center_y - cluster_size), min(img_shape[0], center_y + cluster_size)):
-            for x in range(max(0, center_x - cluster_size), min(img_shape[1], center_x + cluster_size)):
-                if np.sqrt((y - center_y)**2 + (x - center_x)**2) <= cluster_size:
-                    cluster_pixels.append((y, x))
-        
-        num_pixels_to_dropout = int(len(cluster_pixels) * dropout_ratio)
-        dropout_pixels = np.random.choice(len(cluster_pixels), num_pixels_to_dropout, replace=False)
-        
-        for idx in dropout_pixels:
-            y, x = cluster_pixels[idx]
-            mask[y, x] = 1
+    # Get list of all mask files
+    mask_files = [f for f in os.listdir(mask_dir) if f.startswith('MASK_') and f.endswith('.png')]
     
-    return mask[:, :, np.newaxis]
-
-
-
+    if not mask_files:
+        raise ValueError("No mask files found in the directory")
+    
+    # Randomly select a mask file
+    selected_mask = random.choice(mask_files)
+    image_path = os.path.join(mask_dir, selected_mask)
+    
+    # Load the image
+    image = Image.open(image_path)
+    
+    # Convert the image to grayscale
+    image = image.convert('L')
+    
+    # Invert the image (black becomes white and white becomes black)
+    image = Image.eval(image, lambda x: 255 - x)
+    
+    # Threshold the image to create a binary mask
+    mask = np.array(image) > 0
+    mask = mask.astype(np.uint8)
+    
+    # Add the channel dimension
+    mask = mask[:, :, np.newaxis]
+    
+    return mask
