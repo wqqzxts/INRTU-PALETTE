@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
+from pytorch_msssim import ssim
 
 # class mse_loss(nn.Module):
 #     def __init__(self) -> None:
@@ -45,3 +46,21 @@ class FocalLoss(nn.Module):
         loss = -1 * (1-pt)**self.gamma * logpt
         if self.size_average: return loss.mean()
         else: return loss.sum()
+
+
+class SSIMLoss(nn.Module):
+    def __init__(self, data_range=1.0, size_average=True, channel=3):
+        super(SSIMLoss, self).__init__()
+        self.data_range = data_range
+        self.size_average = size_average
+        self.channel = channel
+        
+    def forward(self, output, target):
+        # SSIM returns a value between -1 and 1, with 1 being perfect similarity
+        # We convert it to a loss by subtracting from 1
+        return 1 - ssim(output, target, 
+                       data_range=self.data_range, 
+                       size_average=self.size_average,
+                       win_size=11,
+                       win_sigma=1.5,
+                       channel=self.channel)        

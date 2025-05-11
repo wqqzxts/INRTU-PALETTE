@@ -73,3 +73,20 @@ def inception_score(imgs, cuda=True, batch_size=32, resize=False, splits=1):
         split_scores.append(np.exp(np.mean(scores)))
 
     return np.mean(split_scores), np.std(split_scores)
+
+
+def psnr(input, target, max_val=1.0):
+    """
+    Compute Peak Signal-to-Noise Ratio (PSNR)
+    Args:
+        input: tensor of shape [B, C, H, W]
+        target: tensor of shape [B, C, H, W]
+        max_val: maximum possible pixel value of the images (default 1.0)
+    Returns:
+        PSNR value
+    """
+    with torch.no_grad():
+        mse = torch.mean((input - target) ** 2)
+        if mse == 0:
+            return float('inf')
+        return 20 * torch.log10(max_val / torch.sqrt(mse))
