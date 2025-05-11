@@ -6,8 +6,7 @@ from PIL import Image, ImageEnhance, ImageOps
 
 class AutoAugment(object):
     def __init__(self):
-        self.policies = [
-            ['Rotate', 0.7, 2, 'Contrast', 0.2, 6],
+        self.policies = [            
             ['Sharpness', 0.8, 1, 'Sharpness', 0.9, 3],
             ['Contrast', 0.5, 8, 'Equalize', 0.9, 2],
             ['Posterize', 0.3, 7, 'Brightness', 0.6, 7],
@@ -23,14 +22,6 @@ class AutoAugment(object):
             ['Contrast', 0.9, 2, 'Brightness', 0.8, 3],
             ['Equalize', 0.8, 8, 'Contrast', 0.1, 3],
             ['Contrast', 0.9, 1, 'Brightness', 0.7, 9],
-            ['Rotate', 0.5, 3, 'Posterize', 0.7, 5],
-            ['Equalize', 0.6, 2, 'Rotate', 0.8, 4],
-            ['Rotate', 0.7, 1, 'Brightness', 0.4, 8],
-            ['Sharpness', 0.3, 6, 'Rotate', 0.9, 2],
-            ['Rotate', 0.8, 5, 'Contrast', 0.6, 3],
-            ['Posterize', 0.4, 7, 'Rotate', 0.6, 3],
-            ['Rotate', 0.6, 0, 'Equalize', 0.5, 6],
-            ['Brightness', 0.5, 6, 'Rotate', 0.9, 5],
         ]
 
     def __call__(self, img):
