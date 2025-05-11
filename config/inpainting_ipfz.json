@@ -1,5 +1,5 @@
 {
-    "name": "inpainting_celebahq", // experiments name
+    "name": "inpainting_ipfz", // experiments name
     "gpu_ids": [0], // gpu ids list, default is single 0
     "seed" : -1, // random seed, seed <0 represents randomization not used 
     "finetune_norm": false, // find the parameters to optimize
@@ -10,7 +10,7 @@
         "tb_logger": "tb_logger", // path of tensorboard logger
         "results": "results",
         "checkpoint": "checkpoint",
-        "resume_state": "experiments/train_inpainting_celebahq_220426_233652/checkpoint/190" 
+        "resume_state": "null" 
         // "resume_state": "/home/jovyan/cloud/Palette/INRTU-PALETTE/experiments/checkpoints/" // loading .state  and .pth from given epoch and iteration
     },
 
@@ -19,7 +19,7 @@
             "which_dataset": {  // import designated dataset using arguments 
                 "name": ["data.dataset", "InpaintDataset"], // import Dataset() class / function(not recommend) from data.dataset.py (default is [data.dataset.py])
                 "args":{ // arguments to initialize dataset
-                    "data_root": "/home/jovyan/cloud/Palette/INRTU-PALETTE/datasets/ipfz/flist/true_data/train.flist",
+                    "data_root": "/home/jovyan/work/Palette/INRTU-PALETTE/datasets/ipfz/flist/true_data/train.flist",
                     "data_len": -1,
                     "mask_config": {
                         "mask_mode": "ebsd_missing_data_simulation"
@@ -48,7 +48,7 @@
             "which_dataset": {
                 "name": "InpaintDataset", // import Dataset() class / function(not recommend) from default file
                 "args":{
-                    "data_root": "/home/jovyan/cloud/Palette/INRTU-PALETTE/datasets/ipfz/flist/true_data/test.flist",
+                    "data_root": "/home/jovyan/work/Palette/INRTU-PALETTE/datasets/ipfz/flist/true_data/test.flist",
                     "mask_config": {
                         "mask_mode": "ebsd_missing_data_simulation"
                     }
@@ -89,7 +89,7 @@
                     "unet": {
                         "in_channel": 6,
                         "out_channel": 3,
-                        "inner_channel": 96,
+                        "inner_channel": 32,
                         "channel_mults": [
                             1,
                             2,
