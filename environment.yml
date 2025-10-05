@@ -5,9 +5,9 @@ channels:
   - defaults
 dependencies:
   - python==3.10
-  - pytorch==2.5.1
-  - torchvision==0.20.1
-  - torchaudio==2.5.1
+  - torch==2.6.0
+  - torchvision==0.21.0
+  - torchaudio==2.6.0
   - pytorch-cuda=12.4
   - pandas
   - numpy
