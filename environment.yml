@@ -5,9 +5,6 @@ channels:
   - defaults
 dependencies:
   - python==3.10
-  - torch==2.6.0
-  - torchvision==0.21.0
-  - torchaudio==2.6.0
   - pytorch-cuda=12.4
   - pandas
   - numpy
@@ -17,3 +14,6 @@ dependencies:
       - opencv-python
       - clean-fid
       - tqdm
+      - torch==2.6.0
+      - torchvision==0.21.0
+      - torchaudio==2.6.0
