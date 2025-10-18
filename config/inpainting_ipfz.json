@@ -10,8 +10,8 @@
         "tb_logger": "tb_logger", // path of tensorboard logger
         "results": "results",
         "checkpoint": "checkpoint",
-        "resume_state": "null" 
-        // "resume_state": "/home/jovyan/cloud/Palette/INRTU-PALETTE/experiments/checkpoints/" // loading .state  and .pth from given epoch and iteration
+        // "resume_state": "null" 
+        "resume_state": "/home/jovyan/cloud/Palette/results/22-05-18-ssim-mae/checkpoints/23500" // loading .state  and .pth from given epoch and iteration
     },
 
     "datasets": { // train or test
@@ -19,10 +19,10 @@
             "which_dataset": {  // import designated dataset using arguments 
                 "name": ["data.dataset", "InpaintDataset"], // import Dataset() class / function(not recommend) from data.dataset.py (default is [data.dataset.py])
                 "args":{ // arguments to initialize dataset
-                    "data_root": "/home/jovyan/work/Palette/INRTU-PALETTE/datasets/ipfz/flist/true_data/train.flist",
+                    "data_root": "/home/jovyan/cloud/Palette/datasets/ipfz/flist/",
                     "data_len": -1,
                     "mask_config": {
-                        "mask_mode": "ebsd_missing_data_simulation"
+                        "mask_mode": "from_image"
                     }
                 } 
             },
@@ -48,9 +48,9 @@
             "which_dataset": {
                 "name": "InpaintDataset", // import Dataset() class / function(not recommend) from default file
                 "args":{
-                    "data_root": "/home/jovyan/work/Palette/INRTU-PALETTE/datasets/ipfz/flist/true_data/test.flist",
+                    "data_root": "/home/jovyan/cloud/Palette/datasets/ipfz/flist/79Cub/test.flist",
                     "mask_config": {
-                        "mask_mode": "ebsd_missing_data_simulation"
+                        "mask_mode": "white_pixels"
                     }
                 }
             },
