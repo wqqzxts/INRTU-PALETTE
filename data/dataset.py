@@ -67,7 +67,7 @@ class InpaintDataset(data.Dataset):
     def __len__(self):
         return len(self.imgs)
 
-    def get_mask(self):
+    def get_mask(self, image_path):
         if self.mask_mode == 'bbox':
             mask = bbox2mask(self.image_size, random_bbox())
         elif self.mask_mode == 'center':
@@ -84,7 +84,7 @@ class InpaintDataset(data.Dataset):
         elif self.mask_mode == 'from_image':
             mask = create_mask_from_image(self.image_size)
         elif self.mask_mode == 'white_pixels':
-            mask = get_mask_from_image_white_pixels(self.image_size, self.image_path)
+            mask = get_mask_from_image_white_pixels(self.image_size, image_path)
         elif self.mask_mode == 'file':
             pass
         else:
