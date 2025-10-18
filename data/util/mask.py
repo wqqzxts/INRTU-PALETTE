@@ -380,3 +380,34 @@ def create_mask_from_image(img_shape):
     mask = mask[:, :, np.newaxis]
     
     return mask
+
+
+def get_mask_from_image_white_pixels(self, image_path):
+    """
+    Advanced white pixel detection for IPFZ maps.
+    """    
+    original_img = Image.open(image_path).convert('RGB')
+    original_img = original_img.resize((self.image_size[1], self.image_size[0]))
+    img_array = np.array(original_img)    
+        
+    white_reference = np.array([255, 255, 255])
+    color_distance = np.sqrt(np.sum((img_array.astype(float) - white_reference) ** 2, axis=2))
+    mask_distance = (color_distance < 10).astype(np.uint8)
+        
+    brightness = np.mean(img_array, axis=2)
+    mask_brightness = (brightness > 235).astype(np.uint8)
+        
+    mask = (mask_distance & mask_brightness).astype(np.uint8)
+        
+    if np.any(mask):
+        import cv2
+        kernel = np.ones((2, 2), np.uint8)
+        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+        mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+            
+    if not np.any(mask):
+        print(f"Warning: No white pixels found in {image_path}, using fallback mask")
+        mask = bbox2mask(self.image_size, random_bbox(max_bbox_shape=(32, 32)))
+    
+    mask = mask[:, :, np.newaxis]
+    return mask

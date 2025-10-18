@@ -81,7 +81,7 @@ class InpaintDataset(data.Dataset):
             regular_mask = bbox2mask(self.image_size, random_bbox())
             irregular_mask = brush_stroke_mask(self.image_size, )
             mask = regular_mask | irregular_mask
-        elif self.mask_mode == 'ebsd_missing_data_simulation':
+        elif self.mask_mode == 'from_image':
             mask = create_mask_from_image(self.image_size)
         elif self.mask_mode == 'file':
             pass
@@ -174,6 +174,3 @@ class ColorizationDataset(data.Dataset):
 
     def __len__(self):
         return len(self.flist)
-
-
-
