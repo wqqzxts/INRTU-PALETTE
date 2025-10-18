@@ -84,7 +84,7 @@ class InpaintDataset(data.Dataset):
         elif self.mask_mode == 'from_image':
             mask = create_mask_from_image(self.image_size)
         elif self.mask_mode == 'white_pixels':
-            mask = get_mask_from_image_white_pixels(self.image_size)
+            mask = get_mask_from_image_white_pixels(self.image_size, self.image_path)
         elif self.mask_mode == 'file':
             pass
         else:
