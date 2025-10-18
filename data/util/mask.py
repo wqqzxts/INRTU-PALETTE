@@ -384,29 +384,35 @@ def create_mask_from_image(img_shape):
 
 def get_mask_from_image_white_pixels(image_size, image_path):
     """
-    Advanced white pixel detection for IPFZ maps.
+    Simple and precise white pixel detection for IPFZ maps.
+    Only detects exact white pixels (255, 255, 255).
     """    
     original_img = Image.open(image_path).convert('RGB')
     original_img = original_img.resize((image_size[1], image_size[0]))
     img_array = np.array(original_img)    
-        
-    white_reference = np.array([255, 255, 255])
-    color_distance = np.sqrt(np.sum((img_array.astype(float) - white_reference) ** 2, axis=2))
-    mask_distance = (color_distance < 10).astype(np.uint8)
-        
-    brightness = np.mean(img_array, axis=2)
-    mask_brightness = (brightness > 235).astype(np.uint8)
-        
-    mask = (mask_distance & mask_brightness).astype(np.uint8)
-        
+    
+    # Exact white pixel detection - only pixels that are exactly (255, 255, 255)
+    mask = np.all(img_array == 255, axis=2).astype(np.uint8)
+    
+    # Debug information
+    white_pixel_count = np.sum(mask)
+    total_pixels = mask.shape[0] * mask.shape[1]
+    white_percentage = (white_pixel_count / total_pixels) * 100
+    
+    print(f"Exact white pixels detected: {white_pixel_count}/{total_pixels} ({white_percentage:.2f}%) in {os.path.basename(image_path)}")
+    
+    # Clean up the mask
     if np.any(mask):
         import cv2
         kernel = np.ones((2, 2), np.uint8)
-        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+        # Remove noise and small artifacts
         mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
-            
+        # Fill small holes in white regions
+        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+    
+    # Fallback if no white pixels found
     if not np.any(mask):
-        print(f"Warning: No white pixels found in {image_path}, using fallback mask")
+        print(f"Warning: No exact white pixels found in {os.path.basename(image_path)}, using fallback mask")
         mask = bbox2mask(image_size, random_bbox(max_bbox_shape=(32, 32)))
     
     mask = mask[:, :, np.newaxis]
