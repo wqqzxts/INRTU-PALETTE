@@ -384,36 +384,56 @@ def create_mask_from_image(img_shape):
 
 def get_mask_from_image_white_pixels(image_size, image_path):
     """
-    Simple and precise white pixel detection for IPFZ maps.
-    Only detects exact white pixels (255, 255, 255).
+    Advanced white pixel detection for IPFZ maps.
+    Specifically targets pure white pixels (255, 255, 255).
     """    
     original_img = Image.open(image_path).convert('RGB')
-    original_img = original_img.resize((image_size[1], image_size[0]))
+    
+    # FIX: Correct the resize dimensions - PIL uses (width, height)
+    original_img = original_img.resize((image_size[1], image_size[0]))  # This is correct: (width, height)
+    
     img_array = np.array(original_img)    
     
-    # Exact white pixel detection - only pixels that are exactly (255, 255, 255)
-    mask = np.all(img_array == 255, axis=2).astype(np.uint8)
+    # Method 1: Exact white pixel detection (255, 255, 255)
+    exact_white_mask = np.all(img_array == 255, axis=2).astype(np.uint8)
     
-    # Debug information
+    # Method 2: Near-white detection with very tight tolerance
+    white_reference = np.array([255, 255, 255])
+    color_distance = np.sqrt(np.sum((img_array.astype(float) - white_reference) ** 2, axis=2))
+    near_white_mask = (color_distance < 5).astype(np.uint8)
+    
+    # Combine both methods
+    mask = exact_white_mask | near_white_mask
+    
+    # Debug output
     white_pixel_count = np.sum(mask)
     total_pixels = mask.shape[0] * mask.shape[1]
     white_percentage = (white_pixel_count / total_pixels) * 100
     
-    print(f"Exact white pixels detected: {white_pixel_count}/{total_pixels} ({white_percentage:.2f}%) in {os.path.basename(image_path)}")
+    print(f"White pixels detected: {white_pixel_count}/{total_pixels} ({white_percentage:.2f}%) in {os.path.basename(image_path)}")
+    print(f"Image shape: {img_array.shape}, Mask shape: {mask.shape}")
     
-    # Clean up the mask
+    # Clean up the mask with morphological operations
     if np.any(mask):
         import cv2
-        kernel = np.ones((2, 2), np.uint8)
-        # Remove noise and small artifacts
-        mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
-        # Fill small holes in white regions
+        kernel = np.ones((3, 3), np.uint8)
         mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+        mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
     
     # Fallback if no white pixels found
     if not np.any(mask):
-        print(f"Warning: No exact white pixels found in {os.path.basename(image_path)}, using fallback mask")
+        print(f"Warning: No white pixels found in {os.path.basename(image_path)}, using fallback mask")
         mask = bbox2mask(image_size, random_bbox(max_bbox_shape=(32, 32)))
     
+    # FIX: Ensure mask has the same spatial dimensions as the image
+    # Add channel dimension
     mask = mask[:, :, np.newaxis]
+    
+    # FIX: Double-check the dimensions match the expected image_size
+    if mask.shape[0] != image_size[0] or mask.shape[1] != image_size[1]:
+        print(f"Warning: Mask shape {mask.shape} doesn't match image_size {image_size}")
+        # Resize mask to match exactly
+        mask_resized = cv2.resize(mask, (image_size[1], image_size[0]))
+        mask = mask_resized[:, :, np.newaxis]
+    
     return mask
