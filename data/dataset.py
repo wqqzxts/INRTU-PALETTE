@@ -30,6 +30,9 @@ def make_dataset(dir):
     return images
 
 def pil_loader(path):
+    if isinstance(path, (np.ndarray, np.generic)):
+        path = str(path)
+        
     return Image.open(path).convert('RGB')
 
 class InpaintDataset(data.Dataset):
