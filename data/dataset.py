@@ -15,9 +15,26 @@ IMG_EXTENSIONS = [
 def is_image_file(filename):
     return any(filename.endswith(extension) for extension in IMG_EXTENSIONS)
 
+# for white pixel mask
+# def make_dataset(dir):
+#     if os.path.isfile(dir):
+#         images = [i for i in np.genfromtxt(dir, dtype=np.str_, encoding='utf-8')]
+#     else:
+#         images = []
+#         assert os.path.isdir(dir), '%s is not a valid directory' % dir
+#         for root, _, fnames in sorted(os.walk(dir)):
+#             for fname in sorted(fnames):
+#                 if is_image_file(fname):
+#                     path = os.path.join(root, fname)
+#                     images.append(path)
+
+#     return images
+
 def make_dataset(dir):
     if os.path.isfile(dir):
-        images = [i for i in np.genfromtxt(dir, dtype=np.str_, encoding='utf-8')]
+        # Read the file as simple text file, one path per line
+        with open(dir, 'r', encoding='utf-8') as f:
+            images = [line.strip() for line in f.readlines() if line.strip()]
     else:
         images = []
         assert os.path.isdir(dir), '%s is not a valid directory' % dir
@@ -36,7 +53,7 @@ def pil_loader(path):
     return Image.open(path).convert('RGB')
 
 class InpaintDataset(data.Dataset):
-    def __init__(self, data_root, mask_config={}, data_len=-1, image_size=[512, 512], loader=pil_loader):
+    def __init__(self, data_root, mask_config={}, data_len=-1, image_size=[768, 768], loader=pil_loader):
         imgs = make_dataset(data_root)
         if data_len > 0:
             self.imgs = imgs[:int(data_len)]

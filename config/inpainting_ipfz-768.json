@@ -21,7 +21,7 @@
                     "InpaintDataset"
                 ],
                 "args": {
-                    "data_root": "/home/jovyan/cloud/Palette/datasets/ipfz/_flist/ipfz-real-supervised/train.flist",
+                    "data_root": "/home/jovyan/cloud/Palette/datasets/ipfz/_flist/ipfz-real-supervised/train_768.flist",
                     "data_len": -1,
                     "mask_config": {
                         "mask_mode": "from_image"
