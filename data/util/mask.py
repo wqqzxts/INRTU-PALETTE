@@ -370,7 +370,7 @@ def create_mask_from_image(img_shape):
     image = image.convert('L')
     
     # Invert the image (black becomes white and white becomes black)
-    image = Image.eval(image, lambda x: 255 - x)
+    #image = Image.eval(image, lambda x: 255 - x)
     
     # Threshold the image to create a binary mask
     mask = np.array(image) > 0

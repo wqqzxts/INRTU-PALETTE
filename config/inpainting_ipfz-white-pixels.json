@@ -11,7 +11,7 @@
         "tb_logger": "tb_logger",
         "results": "results",
         "checkpoint": "checkpoint",
-        "resume_state": "/home/jovyan/cloud/Palette/results/25-11-24_ipfz-real-supervised-train/checkpoint/495"
+        "resume_state": "null"
     },
     "datasets": {
         "train": {
@@ -21,7 +21,7 @@
                     "InpaintDataset"
                 ],
                 "args": {
-                    "data_root": "/home/jovyan/cloud/Palette/datasets/ipfz/_flist/ipfz-real-supervised/train_768.flist",
+                    "data_root": "/home/jovyan/cloud/Palette/datasets/ipfz/_flist/ipfz-real-supervised/train.flist",
                     "data_len": -1,
                     "mask_config": {
                         "mask_mode": "from_image"
@@ -29,17 +29,17 @@
                 }
             },
             "dataloader": {
-                "validation_split": 0.025,
+                "validation_split": 0.1,
                 "args": {
-                    "batch_size": 1,
-                    "num_workers": 3,
+                    "batch_size": 2,
+                    "num_workers": 4,
                     "shuffle": true,
                     "pin_memory": true,
                     "drop_last": true
                 },
                 "val_args": {
-                    "batch_size": 1,
-                    "num_workers": 3,
+                    "batch_size": 8,
+                    "num_workers": 4,
                     "shuffle": false,
                     "pin_memory": true,
                     "drop_last": false
@@ -81,7 +81,7 @@
                 },
                 "optimizers": [
                     {
-                        "lr": 1e-05,
+                        "lr": 5e-05,
                         "weight_decay": 0
                     }
                 ]
@@ -119,7 +119,7 @@
                             "schedule": "linear",
                             "n_timestep": 1000,
                             "linear_start": 1e-06,
-                            "linear_end": 0.005
+                            "linear_end": 0.01
                         },
                         "test": {
                             "schedule": "linear",
