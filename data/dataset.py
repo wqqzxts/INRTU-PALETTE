@@ -5,7 +5,7 @@ import os
 import torch
 import numpy as np
 
-from .util.mask import (bbox2mask, brush_stroke_mask, get_irregular_mask, random_bbox, random_cropping_bbox, create_mask_from_image, get_mask_from_image_white_pixels)
+from .util.mask import (bbox2mask, brush_stroke_mask, get_irregular_mask, random_bbox, random_cropping_bbox, create_mask_from_image, get_mask_from_image_white_pixels, get_mask_from_image_red_pixels)
 
 IMG_EXTENSIONS = [
     '.jpg', '.JPG', '.jpeg', '.JPEG',
@@ -105,6 +105,8 @@ class InpaintDataset(data.Dataset):
             mask = create_mask_from_image(self.image_size)
         elif self.mask_mode == 'white_pixels':
             mask = get_mask_from_image_white_pixels(self.image_size, image_path)
+        elif self.mask_mode == 'red_pixels':
+            mask = get_mask_from_image_red_pixels(self.image_size, image_path)
         elif self.mask_mode == 'file':
             pass
         else:

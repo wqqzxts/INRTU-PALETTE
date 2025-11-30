@@ -411,3 +411,32 @@ def get_mask_from_image_white_pixels(image_size, image_path):
         mask = np.zeros((image_size[0], image_size[1], 1), dtype=np.uint8)
     
     return mask
+
+def get_mask_from_image_red_pixels(image_size, image_path):
+    """
+    Advanced white pixel detection for IPFZ maps.
+    Specifically targets pure red pixels (255, 0, 0).
+    """    
+    original_img = Image.open(image_path).convert('RGB')
+    original_img = original_img.resize((image_size[1], image_size[0]))     
+    img_array = np.array(original_img)
+
+    # only red channel are equal to 255
+    red_channel = img_array[:, :, 0] == 255
+    green_channel = img_array[:, :, 1] == 0
+    blue_channel = img_array[:, :, 2] == 0
+    
+    mask = (red_channel & green_channel & blue_channel).astype(np.uint8)
+    
+    red_pixel_count = np.sum(mask)
+    total_pixels = mask.shape[0] * mask.shape[1]
+    red_percentage = (red_pixel_count / total_pixels) * 100
+    print(f"Red pixels detected: {red_pixel_count}/{total_pixels} ({red_percentage:.2f}%) in {os.path.basename(image_path)}")
+    print(f"Image shape: {img_array.shape}, Mask shape: {mask.shape}")
+
+    mask = mask[:, :, np.newaxis]
+
+    if not np.any(mask):
+        mask = np.zeros((image_size[0], image_size[1], 1), dtype=np.uint8)
+    
+    return mask
