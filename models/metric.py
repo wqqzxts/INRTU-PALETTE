@@ -3,6 +3,7 @@ from torch import nn
 from torch.autograd import Variable
 from torch.nn import functional as F
 import torch.utils.data
+from pytorch_msssim import ssim
 
 from torchvision.models.inception import inception_v3
 
@@ -90,3 +91,14 @@ def psnr(input, target, max_val=1.0):
         if mse == 0:
             return float('inf')
         return 20 * torch.log10(max_val / torch.sqrt(mse))
+
+
+def ssim(input, target, data_range=1.0):
+    """
+    Simplified SSIM loss that works with the current version of pytorch-msssim
+    """
+    return 1 - ssim(input, target, 
+                   data_range=data_range,
+                   size_average=True,
+                   win_size=11,
+                   win_sigma=1.5)

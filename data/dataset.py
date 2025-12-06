@@ -53,7 +53,7 @@ def pil_loader(path):
     return Image.open(path).convert('RGB')
 
 class InpaintDataset(data.Dataset):
-    def __init__(self, data_root, mask_config={}, data_len=-1, image_size=[768, 768], loader=pil_loader):
+    def __init__(self, data_root, mask_config={}, data_len=-1, image_size=[512, 512], loader=pil_loader):
         imgs = make_dataset(data_root)
         if data_len > 0:
             self.imgs = imgs[:int(data_len)]

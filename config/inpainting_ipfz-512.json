@@ -21,7 +21,7 @@
                     "InpaintDataset"
                 ],
                 "args": {
-                    "data_root": "/home/jovyan/cloud/Palette/datasets/ipfz/_flist/ipfz-real-supervised/train_512.flist",
+                    "data_root": "/home/jovyan/cloud/Palette/datasets/ipfz/_flist/ipfz-real-supervised/train512.flist",
                     "data_len": -1,
                     "mask_config": {
                         "mask_mode": "from_image"
@@ -29,17 +29,17 @@
                 }
             },
             "dataloader": {
-                "validation_split": 0.1,
+                "validation_split": 0.025,
                 "args": {
-                    "batch_size": 3,
-                    "num_workers": 4,
+                    "batch_size": 1,
+                    "num_workers": 1,
                     "shuffle": true,
                     "pin_memory": true,
                     "drop_last": true
                 },
                 "val_args": {
-                    "batch_size": 8,
-                    "num_workers": 4,
+                    "batch_size": 3,
+                    "num_workers": 2,
                     "shuffle": false,
                     "pin_memory": true,
                     "drop_last": false
@@ -81,7 +81,7 @@
                 },
                 "optimizers": [
                     {
-                        "lr": 5e-05,
+                        "lr": 2e-05,
                         "weight_decay": 0
                     }
                 ]
@@ -99,7 +99,7 @@
                     "unet": {
                         "in_channel": 6,
                         "out_channel": 3,
-                        "inner_channel": 32,
+                        "inner_channel": 96,
                         "channel_mults": [
                             1,
                             2,
@@ -107,12 +107,13 @@
                             8
                         ],
                         "attn_res": [
+                            32,
                             16
                         ],
                         "num_head_channels": 32,
                         "res_blocks": 2,
                         "dropout": 0.1,
-                        "image_size": 512                        
+                        "image_size": 512                       
                     },
                     "beta_schedule": {
                         "train": {
@@ -132,10 +133,10 @@
             }
         ],
         "which_losses": [
-            "mse_loss"
+            "combined_loss"
         ],
         "which_metrics": [
-            "mae"
+            "ssim"
         ]
     },
     "train": {

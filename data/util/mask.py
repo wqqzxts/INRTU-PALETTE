@@ -351,7 +351,7 @@ def create_mask_from_image(img_shape):
     Returns:
         numpy.ndarray: Binary mask of shape (height, width, 1), where 1 indicates missing pixels.
     """
-    mask_dir = "/home/jovyan/cloud/Palette/masks/"
+    mask_dir = "/home/jovyan/cloud/Palette/masks/512/"
     
     # Get list of all mask files
     mask_files = [f for f in os.listdir(mask_dir) if f.startswith('MASK_') and f.endswith('.png')]
