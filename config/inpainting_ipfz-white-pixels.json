@@ -11,7 +11,7 @@
         "tb_logger": "tb_logger",
         "results": "results",
         "checkpoint": "checkpoint",
-        "resume_state": "null"
+        "resume_state": "/home/jovyan/cloud/Palette/results/25-12-10_post-train/checkpoint/23560"
     },
     "datasets": {
         "train": {
@@ -50,7 +50,8 @@
             "which_dataset": {
                 "name": "InpaintDataset",
                 "args": {
-                    "data_root": "/home/jovyan/cloud/Palette/datasets/ipfz/_flist/final/test.flist",
+                    //"data_root": "/home/jovyan/cloud/Palette/datasets/ipfz/_flist/final/test.flist",
+                    "data_root": "/home/jovyan/cloud/Palette/datasets/ipfz/_flist/11-2/test.flist",
                     "mask_config": {
                         "mask_mode": "white_pixels"
                     }
@@ -107,12 +108,15 @@
                             8
                         ],
                         "attn_res": [
+                            128,
+                            64,
+                            32,
                             16
                         ],
                         "num_head_channels": 32,
                         "res_blocks": 2,
                         "dropout": 0.1,
-                        "image_size": 768                        
+                        "image_size": 512                        
                     },
                     "beta_schedule": {
                         "train": {
@@ -132,7 +136,7 @@
             }
         ],
         "which_losses": [
-            "mse_loss"
+            "ssim"
         ],
         "which_metrics": [
             "mae"
