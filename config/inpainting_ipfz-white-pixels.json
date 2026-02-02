@@ -11,6 +11,7 @@
         "tb_logger": "tb_logger",
         "results": "results",
         "checkpoint": "checkpoint",
+        //"resume_state": "/home/jovyan/cloud/Palette/results/25-05-18-ssim-mae/checkpoints/23500"
         "resume_state": "/home/jovyan/cloud/Palette/results/25-12-10_post-train/checkpoint/23560"
     },
     "datasets": {
@@ -51,7 +52,10 @@
                 "name": "InpaintDataset",
                 "args": {
                     //"data_root": "/home/jovyan/cloud/Palette/datasets/ipfz/_flist/final/test.flist",
-                    "data_root": "/home/jovyan/cloud/Palette/datasets/ipfz/_flist/11-2/test.flist",
+                    //"data_root": "/home/jovyan/cloud/Palette/datasets/ipfz/_flist/11-2/test.flist",
+                    //"data_root": "/home/jovyan/cloud/Palette/datasets/ipfz/_flist/Si_15-03-13-1/test.flist",
+                    //"data_root": "/home/jovyan/cloud/Palette/datasets/ipfz/_flist/64/test.flist",
+                    "data_root": "/home/jovyan/cloud/Palette/datasets/ipfz/_flist/test-train/test.flist",
                     "mask_config": {
                         "mask_mode": "white_pixels"
                     }

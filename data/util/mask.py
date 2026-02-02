@@ -351,17 +351,20 @@ def create_mask_from_image(img_shape):
     Returns:
         numpy.ndarray: Binary mask of shape (height, width, 1), where 1 indicates missing pixels.
     """
-    mask_dir = "/home/jovyan/cloud/Palette/masks/512/"
+    # mask_dir = "/home/jovyan/cloud/Palette/masks/512/"
+    #mask_dir = "/home/jovyan/cloud/Palette/masks/complex/"
     
     # Get list of all mask files
-    mask_files = [f for f in os.listdir(mask_dir) if f.startswith('MASK_') and f.endswith('.png')]
+#    mask_files = [f for f in os.listdir(mask_dir) if f.startswith('MASK_') and f.endswith('.png')]
     
-    if not mask_files:
-        raise ValueError("No mask files found in the directory")
+#    if not mask_files:
+#        raise ValueError("No mask files found in the directory")
     
     # Randomly select a mask file
-    selected_mask = random.choice(mask_files)
-    image_path = os.path.join(mask_dir, selected_mask)
+#    selected_mask = random.choice(mask_files)
+#    image_path = os.path.join(mask_dir, selected_mask)
+#    image_path = "/home/jovyan/cloud/Palette/masks/512/horizontal-bottom/MASK_171.png"
+    image_path = "/home/jovyan/cloud/Palette/masks/512/complex/MASK_1_18.png"
     
     # Load the image
     image = Image.open(image_path)
